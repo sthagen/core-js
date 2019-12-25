@@ -242,6 +242,7 @@ GLOBAL.tests = {
     return Array.prototype.fill && Array.prototype[Symbol.unscopables].fill;
   },
   'es.array.filter': function () {
+    [].filter.call({ length: -1, 0: 1 }, function (it) { throw it; });
     var array = [];
     var constructor = array.constructor = {};
     constructor[Symbol.species] = function () {
@@ -315,6 +316,7 @@ GLOBAL.tests = {
     }
   },
   'es.array.map': function () {
+    [].map.call({ length: -1, 0: 1 }, function (it) { throw it; });
     var array = [];
     var constructor = array.constructor = {};
     constructor[Symbol.species] = function () {
@@ -576,6 +578,15 @@ GLOBAL.tests = {
     }
   },
   'es.object.assign': function () {
+    if (DESCRIPTORS_SUPPORT && Object.assign({ b: 1 }, Object.assign(Object.defineProperty({}, 'a', {
+      enumerable: true,
+      get: function () {
+        Object.defineProperty(this, 'b', {
+          value: 3,
+          enumerable: false
+        });
+      }
+    }), { b: 2 })).b !== 1) return false;
     var A = {};
     var B = {};
     var symbol = Symbol();
@@ -660,7 +671,7 @@ GLOBAL.tests = {
     return Promise.allSettled;
   },
   'es.promise.finally': [PROMISES_SUPPORT, function () {
-    return Promise.prototype['finally'];
+    return Promise.prototype['finally'].call({ then: function () { return this; } }, function () { /* empty */ });
   }],
   'es.reflect.apply': function () {
     try {
@@ -708,7 +719,8 @@ GLOBAL.tests = {
     return Reflect.preventExtensions;
   },
   'es.reflect.set': function () {
-    return Reflect.set;
+    var object = Object.defineProperty({}, 'a', { configurable: true });
+    return Reflect.set(Object.getPrototypeOf(object), 'a', 1, object) === false;
   },
   'es.reflect.set-prototype-of': function () {
     return Reflect.setPrototypeOf;
@@ -721,18 +733,37 @@ GLOBAL.tests = {
       && RegExp(re1) === re1
       && RegExp(re2) !== re2
       && RegExp(re1, 'i') == '/a/i'
+      && new RegExp('a', 'y') // just check that it doesn't throw
       && RegExp[Symbol.species];
   },
   'es.regexp.exec': function () {
     var re1 = /a/;
     var re2 = /b*/g;
+    var reSticky = new RegExp('a', 'y');
+    var reStickyAnchored = new RegExp('^a', 'y');
     re1.exec('a');
     re2.exec('a');
     return re1.lastIndex === 0 && re2.lastIndex === 0
-      && /()??/.exec('')[1] === undefined;
+      && /()??/.exec('')[1] === undefined
+      && reSticky.exec('abc')[0] === 'a'
+      && reSticky.exec('abc') === null
+      && (reSticky.lastIndex = 1, reSticky.exec('bac')[0] === 'a')
+      && (reStickyAnchored.lastIndex = 2, reStickyAnchored.exec('cba') === null);
   },
   'es.regexp.flags': function () {
-    return /./g.flags === 'g';
+    return /./g.flags === 'g' && new RegExp('a', 'y').flags === 'y';
+  },
+  'es.regexp.sticky': function () {
+    return new RegExp('a', 'y').sticky === true;
+  },
+  'es.regexp.test': function () {
+    var execCalled = false;
+    var re = /[ac]/;
+    re.exec = function () {
+      execCalled = true;
+      return /./.exec.apply(this, arguments);
+    };
+    return re.test('abc') === true && execCalled;
   },
   'es.regexp.to-string': function () {
     return RegExp.prototype.toString.call({ source: 'a', flags: 'b' }) === '/a/b'
@@ -1232,6 +1263,15 @@ GLOBAL.tests = {
   },
   'esnext.number.from-string': function () {
     return Number.fromString;
+  },
+  'esnext.object.iterate-entries': function () {
+    return Object.iterateEntries;
+  },
+  'esnext.object.iterate-keys': function () {
+    return Object.iterateKeys;
+  },
+  'esnext.object.iterate-values': function () {
+    return Object.iterateValues;
   },
   'esnext.observable': function () {
     return Observable;

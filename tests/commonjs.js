@@ -26,6 +26,9 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(load('features/object/is-extensible')({}));
   ok(!load('features/object/is-frozen')({}));
   ok(!load('features/object/is-sealed')({}));
+  ok(typeof load('features/object/iterate-entries')({}).next === 'function');
+  ok(typeof load('features/object/iterate-keys')({}).next === 'function');
+  ok(typeof load('features/object/iterate-values')({}).next === 'function');
   ok(load('features/object/keys')({ q: 0 })[0] === 'q');
   ok(load('features/object/prevent-extensions')({}));
   ok(load('features/object/seal')({}));
@@ -262,6 +265,8 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(typeof load('features/regexp/replace') === 'function');
   ok(typeof load('features/regexp/search') === 'function');
   ok(typeof load('features/regexp/split') === 'function');
+  ok(typeof load('features/regexp/sticky') === 'function');
+  ok(typeof load('features/regexp/test') === 'function');
   load('features/regexp');
   ok(load('features/json').stringify([1]) === '[1]');
   ok(load('features/json/stringify')([1]) === '[1]');
@@ -617,6 +622,8 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(typeof load('stable/regexp/replace') === 'function');
   ok(typeof load('stable/regexp/search') === 'function');
   ok(typeof load('stable/regexp/split') === 'function');
+  ok(typeof load('stable/regexp/sticky') === 'function');
+  ok(typeof load('stable/regexp/test') === 'function');
   load('stable/regexp');
   ok(load('stable/json').stringify([1]) === '[1]');
   ok(load('stable/json/stringify')([1]) === '[1]');
@@ -882,6 +889,8 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(typeof load('es/regexp/replace') === 'function');
   ok(typeof load('es/regexp/search') === 'function');
   ok(typeof load('es/regexp/split') === 'function');
+  ok(typeof load('es/regexp/sticky') === 'function');
+  ok(typeof load('es/regexp/test') === 'function');
   load('es/regexp');
   ok(load('es/json').stringify([1]) === '[1]');
   ok(load('es/json/stringify')([1]) === '[1]');
@@ -938,6 +947,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   load('proposals/math-extensions');
   load('proposals/math-signbit');
   load('proposals/number-from-string');
+  load('proposals/object-iteration');
   load('proposals/observable');
   load('proposals/pattern-matching');
   load('proposals/promise-all-settled');

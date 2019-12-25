@@ -1,6 +1,74 @@
 ## Changelog
-##### Unreleased
+##### 3.6.1 - 2019.12.25
+- Fixed a bug related `Symbol` with multiple copies of `core-js` (for `3.4.2-3.6.0`), [#736](https://github.com/zloirock/core-js/issues/736)
+- Refactored some tools
+
+##### 3.6.0 - 2019.12.19
+- Added support of sticky (`y`) `RegExp` flag, [#372](https://github.com/zloirock/core-js/issues/372), [#732](https://github.com/zloirock/core-js/issues/732), [#492](https://github.com/zloirock/core-js/issues/492), thanks [@cvle](https://github.com/cvle) and [@nicolo-ribaudo](https://github.com/nicolo-ribaudo)
+- Added `RegExp#test` delegation to `RegExp#exec`, [#732](https://github.com/zloirock/core-js/issues/732), thanks [@cvle](https://github.com/cvle)
+- Fixed some cases of `Object.create(null)` in IE8-, [#727](https://github.com/zloirock/core-js/issues/727), [#728](https://github.com/zloirock/core-js/issues/728), thanks [@aleen42](https://github.com/aleen42)
+- Allowed object of minimum environment versions as `core-js-compat` and `core-js-builder` `targets` argument
+- Allowed corresponding to Babel `targets.esmodules`, `targets.browsers`, `targets.node` options in `core-js-compat` and `core-js-builder`
+- Engines in compat data and results of targets parsing sorted alphabetically
+- Fixed `features/instance/match-all` entry compat data
+- Fixed `Array.prototype[@@unscopables]` descriptor (was writable)
+- Added Samsung Internet 11 compat data mapping
+
+##### 3.5.0 - 2019.12.12
+- Added [object iteratoration stage 1 proposal](https://github.com/tc39/proposal-object-iteration):
+  - `Object.iterateKeys`
+  - `Object.iterateValues`
+  - `Object.iterateEntries`
+
+##### 3.4.8 - 2019.12.09
+- Added one more workaround for broken in previous versions `inspectSource` helper, [#719](https://github.com/zloirock/core-js/issues/719)
+- Added Opera Mobile compat data
+- Updated Samsung Internet, iOS, old Node and Android compat data mapping
+- `es.string.match-all` marked as completely supported in FF73
+- Generate `core-js-compat/modules` since often we need just the list of `core-js` modules
+
+##### 2.6.11 [LEGACY] - 2019.12.09
+- Returned usage of `node -e` in the `postinstall` scripts for better cross-platform compatibility, [#582](https://github.com/zloirock/core-js/issues/582)
+- Improved CI detection in the `postinstall` script, [#707](https://github.com/zloirock/core-js/issues/707)
+
+##### 3.4.7 - 2019.12.03
+- Fixed an NPM publishing issue
+
+##### 3.4.6 - 2019.12.03
+- Improved iOS compat data - added missed mapping iOS 12.2 -> Safari 12.1, added bug fixes from patch releases
+- Added Safari 13.1 compat data
+- Added missed in `core-js-compat` helpers `ie_mob` normalization
+- Normalize the result of `getModulesListForTargetVersion` `core-js-compat` helper
+- Improved CI detection in the `postinstall` script, [#707](https://github.com/zloirock/core-js/issues/707)
+
+##### 3.4.5 - 2019.11.28
+- Detect incorrect order of operations in `Object.assign`, MS Edge bug
+- Detect usage of `ToLength` in `Array#{ filter, map }`, FF48-49 and MS Edge 14- issues
+- Detect incorrect MS Edge 17-18 `Reflect.set` which allows setting the property to object with non-writable property on the prototype
+- Fixed `inspectSource` helper with multiple `core-js` copies and some related features like some edge cases of `Promise` feature detection
+
+##### 3.4.4 - 2019.11.27
+- Added feature detection for Safari [non-generic `Promise#finally` bug](https://bugs.webkit.org/show_bug.cgi?id=200829) **(critical for `core-js-pure`)**
+- Fixed missed `esnext.string.code-points` in `core-js/features/string` entry point
+- Updated `Iterator` proposal feature detection for the case of non-standard `Iterator` in FF44-
+
+##### 3.4.3 - 2019.11.26
+- Fixed missed `es.json.stringify` and some modules from iteration helpers proposal in some entry points **(includes the root entry point)**
+- Added a workaround of `String#{ endsWith, startsWith }` MDN polyfills bugs, [#702](https://github.com/zloirock/core-js/issues/702)
+- Fixed `.size` property descriptor of `Map` / `Set` in the pure version
+- Refactoring, some internal improvements
+
+##### 3.4.2 - 2019.11.22
+- Don't use polyfilled symbols as internal uids, a workaround for some incorrect use cases
+- `String#replaceAll` is available only in nightly FF builds
+- Improved `Promise` feature detection for the case of V8 6.6 with multiple `core-js` copies
+- Some internals optimizations
+- Added Node 13.2 -> V8 7.9 compat data mapping
+- Returned usage of `node -e` in `postinstall` scripts
+
+##### 3.4.1 - 2019.11.12
 - Throw when `(Async)Iterator#flatMap` mapper returns a non-iterable, per [tc39/proposal-iterator-helpers/55](https://github.com/tc39/proposal-iterator-helpers/issues/55) and [tc39/proposal-iterator-helpers/59](https://github.com/tc39/proposal-iterator-helpers/pull/59)
+- Removed own `AggregateError#toString`, per [tc39/proposal-promise-any/49](https://github.com/tc39/proposal-promise-any/pull/49)
 - Global `core-js` `Promise` polyfill passes feature detection in the pure versions
 - Fixed indexes in `String#replaceAll` callbacks
 - `String#replaceAll` marked as supported by FF72
@@ -36,7 +104,7 @@
 - Fixed compatibility of `core-js-compat` with Node 6 and Yarn, [#669](https://github.com/zloirock/core-js/issues/669) 
 
 ##### 3.3.1 - 2019.10.13
-- Fixed a NPM publishing issue
+- Fixed an NPM publishing issue
 
 ##### 3.3.0 - 2019.10.13
 - **`String#{ matchAll, replaceAll }` throws an error on non-global regex argument per [the decision from TC39 meetings](https://github.com/tc39/ecma262/pull/1716) (+ [this PR](https://github.com/tc39/proposal-string-replaceall/pull/24)). It's a breaking change, but since it's a breaking change in the ES spec, it's added at the minor release**

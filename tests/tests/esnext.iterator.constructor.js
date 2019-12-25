@@ -1,5 +1,7 @@
 import { createIterator } from '../helpers/helpers';
 
+const { getPrototypeOf } = Object;
+
 QUnit.test('Iterator', assert => {
   assert.isFunction(Iterator);
   assert.arity(Iterator, 0);
@@ -12,7 +14,12 @@ QUnit.test('Iterator', assert => {
     } catch { /* empty */ }
   })();
 
-  if (generator) assert.ok(generator instanceof Iterator, 'AsyncGenerator');
+  if (generator) {
+    const proto = getPrototypeOf(getPrototypeOf(getPrototypeOf(generator)));
+    if (proto !== Object.prototype && proto !== null) {
+      assert.ok(generator instanceof Iterator, 'Generator');
+    }
+  }
 
   assert.ok(''[Symbol.iterator]() instanceof Iterator, 'String Iterator');
   assert.ok([].values() instanceof Iterator, 'Array Iterator');
@@ -26,7 +33,7 @@ QUnit.test('Iterator', assert => {
 });
 
 QUnit.test('Iterator#constructor', assert => {
-  assert.strictEqual(Iterator.prototype.constructor, Iterator, 'Iterator#constructor is AsyncIterator');
+  assert.strictEqual(Iterator.prototype.constructor, Iterator, 'Iterator#constructor is Iterator');
 });
 
 QUnit.test('Iterator#@@toStringTag', assert => {
