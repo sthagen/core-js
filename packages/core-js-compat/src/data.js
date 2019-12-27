@@ -96,10 +96,10 @@ const data = {
     safari: '9.0',
   },
   'es.array.every': {
-    chrome: '26',
-    firefox: '4',
-    ie: '9',
-    safari: '8.0',
+    chrome: '48',
+    edge: '15',
+    firefox: '50',
+    safari: '9.0',
   },
   'es.array.fill': {
     chrome: '45',
@@ -136,10 +136,10 @@ const data = {
     safari: '12.0',
   },
   'es.array.for-each': {
-    chrome: '26',
-    firefox: '4',
-    ie: '9',
-    safari: '8.0',
+    chrome: '48',
+    edge: '15',
+    firefox: '50',
+    safari: '9.0',
   },
   'es.array.from': {
     chrome: '51',
@@ -149,15 +149,15 @@ const data = {
   },
   'es.array.includes': {
     chrome: '53',
-    edge: '14',
+    edge: '15',
     firefox: '48',
     safari: '10.0',
   },
   'es.array.index-of': {
     chrome: '51',
-    firefox: '4',
-    ie: '9',
-    safari: '8.0',
+    edge: '15',
+    firefox: '50',
+    safari: '11.0',
   },
   'es.array.is-array': {
     chrome: '5',
@@ -180,9 +180,9 @@ const data = {
   },
   'es.array.last-index-of': {
     chrome: '51',
-    firefox: '4',
-    ie: '9',
-    safari: '8.0',
+    edge: '13',
+    firefox: '50',
+    safari: '11.0',
   },
   'es.array.map': {
     chrome: '51',
@@ -197,16 +197,16 @@ const data = {
     safari: '9.0',
   },
   'es.array.reduce': {
-    chrome: '26',
-    firefox: '4',
-    ie: '9',
-    safari: '8.0',
+    chrome: '48',
+    edge: '15',
+    firefox: '50',
+    safari: '9.0',
   },
   'es.array.reduce-right': {
-    chrome: '26',
-    firefox: '4',
-    ie: '9',
-    safari: '8.0',
+    chrome: '48',
+    edge: '15',
+    firefox: '50',
+    safari: '9.0',
   },
   'es.array.reverse': {
     chrome: '26',
@@ -217,15 +217,15 @@ const data = {
   },
   'es.array.slice': {
     chrome: '51',
-    edge: '13',
+    edge: '15',
     firefox: '48',
-    safari: '10.0',
+    safari: '11.0',
   },
   'es.array.some': {
-    chrome: '26',
-    firefox: '4',
-    ie: '9',
-    safari: '8.0',
+    chrome: '48',
+    edge: '15',
+    firefox: '50',
+    safari: '9.0',
   },
   'es.array.sort': {
     chrome: '63',
@@ -241,9 +241,9 @@ const data = {
   },
   'es.array.splice': {
     chrome: '51',
-    edge: '13',
+    edge: '15',
     firefox: '49',
-    safari: '10.0',
+    safari: '11.0',
   },
   'es.array.unscopables.flat': {
     chrome: '73',

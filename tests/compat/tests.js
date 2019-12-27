@@ -232,6 +232,7 @@ GLOBAL.tests = {
     return Array.prototype.copyWithin && Array.prototype[Symbol.unscopables].copyWithin;
   },
   'es.array.every': function () {
+    [].every.call({ length: -1, 0: 1 }, function (it) { throw it; });
     try {
       Array.prototype.every.call(null, function () { /* empty */ });
       return false;
@@ -251,11 +252,13 @@ GLOBAL.tests = {
     return array.filter(Boolean).foo === 1;
   },
   'es.array.find': function () {
+    [].find.call({ length: -1, 0: 1 }, function (it) { throw it; });
     var SKIPS_HOLES = true;
     Array(1).find(function () { return SKIPS_HOLES = false; });
     return !SKIPS_HOLES && Array.prototype[Symbol.unscopables].find;
   },
   'es.array.find-index': function () {
+    [].findIndex.call({ length: -1, 0: 1 }, function (it) { throw it; });
     var SKIPS_HOLES = true;
     Array(1).findIndex(function () { return SKIPS_HOLES = false; });
     return !SKIPS_HOLES && Array.prototype[Symbol.unscopables].findIndex;
@@ -267,6 +270,7 @@ GLOBAL.tests = {
     return Array.prototype.flatMap;
   },
   'es.array.for-each': function () {
+    [].forEach.call({ length: -1, 0: 1 }, function (it) { throw it; });
     try {
       Array.prototype.forEach.call(null, function () { /* empty */ });
       return false;
@@ -275,11 +279,19 @@ GLOBAL.tests = {
   },
   'es.array.from': SAFE_ITERATION_CLOSING_SUPPORT,
   'es.array.includes': function () {
-    return Array.prototype.includes && Array.prototype[Symbol.unscopables].includes;
+    [].includes.call(Object.defineProperty({ length: -1 }, 0, {
+      enumerable: true,
+      get: function (it) { throw it; }
+    }), 0);
+    return Array.prototype[Symbol.unscopables].includes;
   },
   'es.array.index-of': function () {
+    [].indexOf.call(Object.defineProperty({ length: -1 }, 0, {
+      enumerable: true,
+      get: function (it) { throw it; }
+    }), 0);
     try {
-      Array.prototype.indexOf.call(null);
+      [].indexOf.call(null);
     } catch (error) {
       return 1 / [1].indexOf(1, -0) > 0;
     }
@@ -309,8 +321,18 @@ GLOBAL.tests = {
     return true;
   },
   'es.array.last-index-of': function () {
+    [].lastIndexOf.call(Object.defineProperties({ length: -1 }, {
+      2147483646: {
+        enumerable: true,
+        get: function (it) { throw it; }
+      },
+      4294967294: {
+        enumerable: true,
+        get: function (it) { throw it; }
+      }
+    }), 2147483647);
     try {
-      Array.prototype.lastIndexOf.call(null);
+      [].lastIndexOf.call(null);
     } catch (error) {
       return 1 / [1].lastIndexOf(1, -0) > 0;
     }
@@ -329,6 +351,7 @@ GLOBAL.tests = {
     return Array.of.call(F) instanceof F;
   },
   'es.array.reduce': function () {
+    [].reduce.call({ length: -1, 0: 1 }, function (it) { throw it; }, 1);
     try {
       Array.prototype.reduce.call(null, function () { /* empty */ }, 1);
     } catch (error) {
@@ -336,6 +359,7 @@ GLOBAL.tests = {
     }
   },
   'es.array.reduce-right': function () {
+    [].reduceRight.call({ length: -1, 2147483646: 1, 4294967294: 1 }, function (it) { throw it; }, 1);
     try {
       Array.prototype.reduceRight.call(null, function () { /* empty */ }, 1);
     } catch (error) {
@@ -347,6 +371,7 @@ GLOBAL.tests = {
     return String(test) !== String(test.reverse());
   },
   'es.array.slice': function () {
+    if ([].slice.call({ length: -1, 0: 1 }, 0, 1).length) return false;
     var array = [];
     var constructor = array.constructor = {};
     constructor[Symbol.species] = function () {
@@ -355,6 +380,7 @@ GLOBAL.tests = {
     return array.slice().foo === 1;
   },
   'es.array.some': function () {
+    [].some.call({ length: -1, 0: 1 }, function (it) { throw it; });
     try {
       Array.prototype.some.call(null, function () { /* empty */ });
     } catch (error) {
@@ -377,6 +403,10 @@ GLOBAL.tests = {
     return Array[Symbol.species];
   }],
   'es.array.splice': function () {
+    [].splice.call(Object.defineProperty({ length: -1 }, 0, {
+      enumerable: true,
+      get: function (it) { throw it; }
+    }), 0, 1);
     var array = [];
     var constructor = array.constructor = {};
     constructor[Symbol.species] = function () {
