@@ -29,6 +29,7 @@ deepStrictEqual(targetsParser({ browsers: 'ie 11, chrome 56, ios_saf 12.2' }), n
 
 // targets.esmodules
 deepStrictEqual(targetsParser({ esmodules: true }), new Map([
+  ['android', '61'],
   ['chrome', '61'],
   ['edge', '16'],
   ['firefox', '60'],
@@ -96,3 +97,6 @@ deepStrictEqual(targetsParser({
   ['safari', '5.1'],
   ['samsung', '4'],
 ]));
+
+// eslint-disable-next-line no-console
+console.log('\u001B[32mtargets parser tested\u001B[0m');

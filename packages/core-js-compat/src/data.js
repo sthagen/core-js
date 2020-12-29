@@ -83,6 +83,11 @@ const data = {
     firefox: '48',
     safari: '9.0',
   },
+  'es.aggregate-error': {
+    chrome: '85',
+    firefox: '79',
+    safari: '14.0',
+  },
   'es.array.concat': {
     chrome: '51',
     edge: '15',
@@ -197,15 +202,17 @@ const data = {
     safari: '9.0',
   },
   'es.array.reduce': {
-    chrome: '48',
+    chrome: '83', // https://bugs.chromium.org/p/chromium/issues/detail?id=1049982
     edge: '15',
     firefox: '50',
+    node: '6.0', // ^^^
     safari: '9.0',
   },
   'es.array.reduce-right': {
-    chrome: '48',
+    chrome: '83', // https://bugs.chromium.org/p/chromium/issues/detail?id=1049982
     edge: '15',
     firefox: '50',
+    node: '6.0', // ^^^
     safari: '9.0',
   },
   'es.array.reverse': {
@@ -713,6 +720,11 @@ const data = {
     firefox: '71',
     safari: '13',
   },
+  'es.promise.any': {
+    chrome: '85',
+    firefox: '79',
+    safari: '14.0',
+  },
   'es.promise.finally': {
     // V8 6.6 has a serious bug
     chrome: '67', // '63',
@@ -801,6 +813,11 @@ const data = {
     edge: '12',
     firefox: '42',
     safari: '10.0',
+  },
+  'es.reflect.to-string-tag': {
+    chrome: '86',
+    firefox: '82',
+    safari: '14.0',
   },
   'es.regexp.constructor': {
     chrome: '51',
@@ -905,6 +922,13 @@ const data = {
   },
   'es.string.replace': {
     chrome: '64',
+    firefox: '78',
+    safari: '14.0',
+  },
+  'es.string.replace-all': {
+    chrome: '85',
+    firefox: '77',
+    safari: '13.1',
   },
   'es.string.search': {
     chrome: '51',
@@ -1228,13 +1252,19 @@ const data = {
     firefox: '53',
     safari: '10.0',
   },
-  'esnext.aggregate-error': {
+  // TODO: Remove from `core-js@4`
+  'esnext.aggregate-error': null,
+  'esnext.array.at': {
+  },
+  'esnext.array.filter-out': {
   },
   'esnext.array.is-template-object': {
   },
   'esnext.array.last-index': {
   },
   'esnext.array.last-item': {
+  },
+  'esnext.array.unique-by': {
   },
   'esnext.async-iterator.constructor': {
   },
@@ -1263,6 +1293,8 @@ const data = {
   'esnext.async-iterator.take': {
   },
   'esnext.async-iterator.to-array': {
+  },
+  'esnext.bigint.range': {
   },
   'esnext.composite-key': {
   },
@@ -1299,6 +1331,8 @@ const data = {
   'esnext.iterator.to-array': {
   },
   'esnext.map.delete-all': {
+  },
+  'esnext.map.emplace': {
   },
   'esnext.map.every': {
   },
@@ -1369,18 +1403,23 @@ const data = {
   },
   'esnext.number.from-string': {
   },
+  'esnext.number.range': {
+  },
+  // TODO: Remove from `core-js@4`
   'esnext.object.iterate-entries': {
   },
+  // TODO: Remove from `core-js@4`
   'esnext.object.iterate-keys': {
   },
+  // TODO: Remove from `core-js@4`
   'esnext.object.iterate-values': {
   },
   'esnext.observable': {
   },
   // TODO: Remove from `core-js@4`
   'esnext.promise.all-settled': null,
-  'esnext.promise.any': {
-  },
+  // TODO: Remove from `core-js@4`
+  'esnext.promise.any': null,
   'esnext.promise.try': {
   },
   'esnext.reflect.define-metadata': {
@@ -1443,8 +1482,7 @@ const data = {
   },
   // TODO: Remove from `core-js@4`
   'esnext.string.match-all': null,
-  'esnext.string.replace-all': {
-  },
+  'esnext.string.replace-all': null,
   'esnext.symbol.async-dispose': {
   },
   'esnext.symbol.dispose': {
@@ -1456,11 +1494,17 @@ const data = {
   // TODO: Remove from `core-js@4`
   'esnext.symbol.replace-all': {
   },
+  'esnext.typed-array.at': {
+  },
+  'esnext.typed-array.filter-out': {
+  },
   'esnext.weak-map.delete-all': {
   },
   'esnext.weak-map.from': {
   },
   'esnext.weak-map.of': {
+  },
+  'esnext.weak-map.emplace': {
   },
   'esnext.weak-map.upsert': {
   },
@@ -1523,8 +1567,11 @@ const data = {
 };
 
 // TODO: Remove from `core-js@4`
+data['esnext.aggregate-error'] = data['es.aggregate-error'];
 data['esnext.global-this'] = data['es.global-this'];
 data['esnext.promise.all-settled'] = data['es.promise.all-settled'];
+data['esnext.promise.any'] = data['es.promise.any'];
 data['esnext.string.match-all'] = data['es.string.match-all'];
+data['esnext.string.replace-all'] = data['es.string.replace-all'];
 
 module.exports = data;

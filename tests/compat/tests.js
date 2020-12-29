@@ -138,11 +138,11 @@ function createIsRegExpLogicTest(name) {
     var regexp = /./;
     try {
       '/./'[name](regexp);
-    } catch (e) {
+    } catch (error1) {
       try {
         regexp[Symbol.match] = false;
         return '/./'[name](regexp);
-      } catch (f) { /* empty */ }
+      } catch (error2) { /* empty */ }
     } return false;
   };
 }
@@ -216,6 +216,9 @@ GLOBAL.tests = {
   'es.symbol.unscopables': [SYMBOLS_SUPPORT, function () {
     return Symbol.unscopables;
   }],
+  'es.aggregate-error': function () {
+    return typeof AggregateError === 'function';
+  },
   'es.array.concat': function () {
     var array1 = [];
     array1[Symbol.isConcatSpreadable] = false;
@@ -384,10 +387,10 @@ GLOBAL.tests = {
   'es.array.sort': function () {
     try {
       Array.prototype.sort.call(null);
-    } catch (e) {
+    } catch (error1) {
       try {
         [1, 2, 3].sort(null);
-      } catch (f) {
+      } catch (error2) {
         [1, 2, 3].sort(undefined);
         return true;
       }
@@ -694,6 +697,9 @@ GLOBAL.tests = {
   'es.promise.all-settled': function () {
     return Promise.allSettled;
   },
+  'es.promise.any': function () {
+    return Promise.any;
+  },
   'es.promise.finally': [PROMISES_SUPPORT, function () {
     return Promise.prototype['finally'].call({ then: function () { return this; } }, function () { /* empty */ });
   }],
@@ -748,6 +754,9 @@ GLOBAL.tests = {
   },
   'es.reflect.set-prototype-of': function () {
     return Reflect.setPrototypeOf;
+  },
+  'es.reflect.to-string-tag': function () {
+    return Reflect[Symbol.toStringTag];
   },
   'es.regexp.constructor': function () {
     var re1 = /a/g;
@@ -874,6 +883,9 @@ GLOBAL.tests = {
       && ''.replace(re2, '$<a>') === '7'
       && 'a'.replace(/./, '$0') === '$0'
       && /./[Symbol.replace]('a', '$0') === '$0';
+  },
+  'es.string.replace-all': function () {
+    return String.prototype.replaceAll;
   },
   'es.string.search': function () {
     var O = {};
@@ -1088,14 +1100,20 @@ GLOBAL.tests = {
       && set.add({}) == set
       && set[Symbol.toStringTag];
   }],
-  'esnext.aggregate-error': function () {
-    return typeof AggregateError === 'function';
+  'esnext.array.at': function () {
+    return [].at;
+  },
+  'esnext.array.filter-out': function () {
+    return [].filterOut;
   },
   'esnext.array.last-index': function () {
     return [1, 2, 3].lastIndex && Array.prototype[Symbol.unscopables].lastIndex;
   },
   'esnext.array.last-item': function () {
     return [1, 2, 3].lastItem && Array.prototype[Symbol.unscopables].lastItem;
+  },
+  'esnext.array.unique-by': function () {
+    return [].uniqueBy;
   },
   'esnext.async-iterator.constructor': function () {
     return typeof AsyncIterator == 'function';
@@ -1138,6 +1156,10 @@ GLOBAL.tests = {
   },
   'esnext.async-iterator.to-array': function () {
     return AsyncIterator.prototype.toArray;
+  },
+  'esnext.bigint.range': function () {
+    // eslint-disable-next-line no-undef
+    return BigInt.range;
   },
   'esnext.composite-key': function () {
     return compositeKey;
@@ -1195,6 +1217,9 @@ GLOBAL.tests = {
   'esnext.map.delete-all': function () {
     return Map.prototype.deleteAll;
   },
+  'esnext.map.emplace': function () {
+    return Map.prototype.emplace;
+  },
   'esnext.map.every': function () {
     return Map.prototype.every;
   },
@@ -1247,6 +1272,7 @@ GLOBAL.tests = {
   'esnext.map.update-or-insert': function () {
     return Map.prototype.updateOrInsert;
   },
+  // TODO: Remove from `core-js@4`
   'esnext.map.upsert': function () {
     return Map.prototype.upsert;
   },
@@ -1296,20 +1322,23 @@ GLOBAL.tests = {
   'esnext.number.from-string': function () {
     return Number.fromString;
   },
+  'esnext.number.range': function () {
+    return Number.range;
+  },
+  // TODO: Remove from `core-js@4`
   'esnext.object.iterate-entries': function () {
     return Object.iterateEntries;
   },
+  // TODO: Remove from `core-js@4`
   'esnext.object.iterate-keys': function () {
     return Object.iterateKeys;
   },
+  // TODO: Remove from `core-js@4`
   'esnext.object.iterate-values': function () {
     return Object.iterateValues;
   },
   'esnext.observable': function () {
     return Observable;
-  },
-  'esnext.promise.any': function () {
-    return Promise.any;
   },
   'esnext.promise.try': [PROMISES_SUPPORT, function () {
     return Promise['try'];
@@ -1396,13 +1425,10 @@ GLOBAL.tests = {
     return Set.prototype.union;
   },
   'esnext.string.at': function () {
-    return String.prototype.at;
+    return '𠮷'.at(0) === '𠮷';
   },
   'esnext.string.code-points': function () {
     return String.prototype.codePoints;
-  },
-  'esnext.string.replace-all': function () {
-    return String.prototype.replaceAll;
   },
   'esnext.symbol.dispose': function () {
     return Symbol.dispose;
@@ -1417,8 +1443,17 @@ GLOBAL.tests = {
   'esnext.symbol.replace-all': function () {
     return Symbol.replaceAll;
   },
+  'esnext.typed-array.at': function () {
+    return Int8Array.prototype.at;
+  },
+  'esnext.typed-array.filter-out': function () {
+    return Int8Array.prototype.filterOut;
+  },
   'esnext.weak-map.delete-all': function () {
     return WeakMap.prototype.deleteAll;
+  },
+  'esnext.weak-map.emplace': function () {
+    return WeakMap.prototype.emplace;
   },
   'esnext.weak-map.from': function () {
     return WeakMap.from;
@@ -1426,6 +1461,7 @@ GLOBAL.tests = {
   'esnext.weak-map.of': function () {
     return WeakMap.of;
   },
+  // TODO: Remove from `core-js@4`
   'esnext.weak-map.upsert': function () {
     return WeakMap.prototype.upsert;
   },

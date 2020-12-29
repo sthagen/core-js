@@ -7,12 +7,13 @@ let PATH;
 
 function load(module) {
   tested++;
-  // eslint-disable-next-line global-require
+  // eslint-disable-next-line node/global-require
   return require(`${ PATH }/${ module }`);
 }
 
 for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   PATH = _PATH;
+  ok(new (load('features/aggregate-error'))([42]).errors[0] === 42);
   ok(load('features/object/assign')({ q: 1 }, { w: 2 }).w === 2);
   ok(load('features/object/create')(Array.prototype) instanceof Array);
   ok(load('features/object/define-property')({}, 'a', { value: 42 }).a === 42);
@@ -61,12 +62,14 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(typeof load('features/array/is-template-object') === 'function');
   ok(Array.isArray(load('features/array/from')('qwe')));
   ok(Array.isArray(load('features/array/of')('q', 'w', 'e')));
+  ok(load('features/array/at')([1, 2, 3], -2) === 2);
   ok(load('features/array/join')('qwe', 1) === 'q1w1e');
   ok(load('features/array/slice')('qwe', 1)[1] === 'e');
   ok(load('features/array/sort')([1, 3, 2])[1] === 2);
   ok(typeof load('features/array/for-each') === 'function');
   ok(typeof load('features/array/map') === 'function');
   ok(typeof load('features/array/filter') === 'function');
+  ok(typeof load('features/array/filter-out') === 'function');
   ok(typeof load('features/array/flat') === 'function');
   ok(typeof load('features/array/flat-map') === 'function');
   ok(typeof load('features/array/some') === 'function');
@@ -78,6 +81,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(typeof load('features/array/last-index-of') === 'function');
   ok(load('features/array/concat')([1, 2, 3], [4, 5, 6]).length === 6);
   ok(load('features/array/copy-within')([1, 2, 3, 4, 5], 0, 3)[0] === 4);
+  ok(load('features/array/splice')([1, 2, 3], 1, 2)[0] === 2);
   ok('next' in load('features/array/entries')([]));
   load('features/array/last-item');
   load('features/array/last-index');
@@ -88,6 +92,8 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok('next' in load('features/array/values')([]));
   ok(load('features/array/includes')([1, 2, 3], 2));
   ok('next' in load('features/array/iterator')([]));
+  ok(typeof load('features/array/unique-by') === 'function');
+  ok(load('features/array/virtual/at').call([1, 2, 3], -2) === 2);
   ok(load('features/array/virtual/join').call('qwe', 1) === 'q1w1e');
   ok(load('features/array/virtual/slice').call('qwe', 1)[1] === 'e');
   ok(load('features/array/virtual/splice').call([1, 2, 3], 1, 2)[0] === 2);
@@ -95,6 +101,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(typeof load('features/array/virtual/for-each') === 'function');
   ok(typeof load('features/array/virtual/map') === 'function');
   ok(typeof load('features/array/virtual/filter') === 'function');
+  ok(typeof load('features/array/virtual/filter-out') === 'function');
   ok(typeof load('features/array/virtual/flat') === 'function');
   ok(typeof load('features/array/virtual/flat-map') === 'function');
   ok(typeof load('features/array/virtual/some') === 'function');
@@ -114,9 +121,11 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok('next' in load('features/array/virtual/values').call([]));
   ok(load('features/array/virtual/includes').call([1, 2, 3], 2));
   ok('next' in load('features/array/virtual/iterator').call([]));
+  ok(typeof load('features/array/virtual/unique-by') === 'function');
   ok(load('features/array/virtual').includes.call([1, 2, 3], 2));
   ok('from' in load('features/array'));
-  ok(load('features/array/splice')([1, 2, 3], 1, 2)[0] === 2);
+  load('features/bigint/range');
+  load('features/bigint');
   ok(load('features/math/acosh')(1) === 0);
   ok(Object.is(load('features/math/asinh')(-0), -0));
   ok(load('features/math/atanh')(1) === Infinity);
@@ -161,6 +170,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(load('features/number/to-fixed')(1, 1) === '1.0');
   ok(load('features/number/to-precision')(1) === '1');
   ok(load('features/number/from-string')('12', 3) === 5);
+  ok(load('features/number/range')(1, 2).next().value === 1);
   ok(load('features/parse-float')('1.5') === 1.5);
   ok(load('features/parse-int')('2.1') === 2);
   ok(load('features/number/virtual/to-fixed').call(1, 1) === '1.0');
@@ -184,6 +194,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(load('features/reflect/prevent-extensions')({}));
   ok(load('features/reflect/set')({}, 'a', 42));
   load('features/reflect/set-prototype-of')(O = {}, []);
+  ok(load('features/reflect/to-string-tag') === 'Reflect');
   ok(O instanceof Array);
   ok(typeof load('features/reflect/define-metadata') === 'function');
   ok(typeof load('features/reflect/delete-metadata') === 'function');
@@ -201,6 +212,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(load('features/string/code-point-at')('a', 0) === 97);
   ok(load('features/string/ends-with')('qwe', 'we'));
   ok(load('features/string/includes')('qwe', 'w'));
+  // ok(load('features/string/at-alternative')('123', -2) === '2');
   ok(load('features/string/repeat')('q', 3) === 'qqq');
   ok(load('features/string/starts-with')('qwe', 'qw'));
   ok(typeof load('features/string/anchor') === 'function');
@@ -230,6 +242,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(load('features/string/virtual/code-point-at').call('a', 0) === 97);
   ok(load('features/string/virtual/ends-with').call('qwe', 'we'));
   ok(load('features/string/virtual/includes').call('qwe', 'w'));
+  // ok(load('features/string/virtual/at-alternative').call('123', -2) === '2');
   ok(load('features/string/virtual/repeat').call('q', 3) === 'qqq');
   ok(load('features/string/virtual/starts-with').call('qwe', 'qw'));
   ok(typeof load('features/string/virtual/anchor') === 'function');
@@ -316,6 +329,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(load('features/weak-map/from')([[{}, 1], [[], 2]]) instanceof WeakMap);
   ok(load('features/weak-set/from')([{}, []]) instanceof WeakSet);
   ok(load('features/map/delete-all')(new Map(), 1, 2) === false);
+  ok(load('features/map/emplace')(new Map([[1, 2]]), 1, { update: it => it ** 2 }) === 4);
   ok(load('features/map/every')(new Map([[1, 2], [2, 3], [3, 4]]), it => it % 2) === false);
   ok(load('features/map/filter')(new Map([[1, 2], [2, 3], [3, 4]]), it => it % 2).size === 1);
   ok(load('features/map/find')(new Map([[1, 2], [2, 3], [3, 4]]), it => it % 2) === 3);
@@ -349,6 +363,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(load('features/set/symmetric-difference')(new Set([1, 2, 3]), [3, 4, 5]).size === 4);
   ok(load('features/set/union')(new Set([1, 2, 3]), [3, 4, 5]).size === 5);
   ok(load('features/weak-map/delete-all')(new WeakMap(), [], {}) === false);
+  ok(load('features/weak-map/emplace')(new WeakMap(), {}, { insert: () => ({ a: 42 }) }).a === 42);
   ok(load('features/weak-map/upsert')(new WeakMap(), {}, null, () => 42) === 42);
   ok(load('features/weak-set/add-all')(new WeakSet(), [], {}) instanceof WeakSet);
   ok(load('features/weak-set/delete-all')(new WeakSet(), [], {}) === false);
@@ -357,7 +372,6 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(load('features/promise/all-settled')([1, 2, 3]) instanceof Promise);
   ok(load('features/promise/any')([1, 2, 3]) instanceof Promise);
   ok(load('features/promise/try')(() => 42) instanceof load('features/promise'));
-  ok(new (load('features/aggregate-error'))([42]).errors[0] === 42);
   ok('from' in load('features/observable'));
   ok(load('es/global-this').Math === Math);
   ok(load('stable/global-this').Math === Math);
@@ -407,6 +421,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok('next' in load('features/get-iterator')([]));
   ok(load('features'));
 
+  ok(new (load('stable/aggregate-error'))([42]).errors[0] === 42);
   ok(load('stable/object/assign')({ q: 1 }, { w: 2 }).w === 2);
   ok(load('stable/object/create')(Array.prototype) instanceof Array);
   ok(load('stable/object/define-property')({}, 'a', { value: 42 }).a === 42);
@@ -557,6 +572,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(load('stable/reflect/prevent-extensions')({}));
   ok(load('stable/reflect/set')({}, 'a', 42));
   load('stable/reflect/set-prototype-of')(O = {}, []);
+  ok(load('stable/reflect/to-string-tag') === 'Reflect');
   ok(O instanceof Array);
   ok('has' in load('stable/reflect'));
   ok(load('stable/string/from-code-point')(97) === 'a');
@@ -581,6 +597,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(typeof load('stable/string/strike') === 'function');
   ok(typeof load('stable/string/sub') === 'function');
   ok(typeof load('stable/string/sup') === 'function');
+  ok(typeof load('stable/string/replace-all') === 'function');
   ok(load('stable/string/pad-start')('a', 3) === '  a');
   ok(load('stable/string/pad-end')('a', 3) === 'a  ');
   ok(load('stable/string/trim-start')(' a ') === 'a ');
@@ -591,6 +608,8 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(load('stable/string/virtual/code-point-at').call('a', 0) === 97);
   ok(load('stable/string/virtual/ends-with').call('qwe', 'we'));
   ok(load('stable/string/virtual/includes').call('qwe', 'w'));
+  ok(typeof load('stable/string/virtual/match-all') === 'function');
+  ok(typeof load('stable/string/virtual/replace-all') === 'function');
   ok(load('stable/string/virtual/repeat').call('q', 3) === 'qqq');
   ok(load('stable/string/virtual/starts-with').call('qwe', 'qw'));
   ok(typeof load('stable/string/virtual/anchor') === 'function');
@@ -662,6 +681,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   Promise = load('stable/promise');
   ok('all' in Promise);
   ok(load('stable/promise/all-settled')([1, 2, 3]) instanceof Promise);
+  ok(load('stable/promise/any')([1, 2, 3]) instanceof Promise);
   ok(typeof load('stable/dom-collections').iterator === 'function');
   ok(typeof load('stable/dom-collections/iterator') === 'function');
   ok(typeof load('stable/set-timeout') === 'function');
@@ -674,6 +694,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(typeof load('stable/url-search-params') === 'function');
   ok(load('stable'));
 
+  ok(new (load('es/aggregate-error'))([42]).errors[0] === 42);
   ok(load('es/object/assign')({ q: 1 }, { w: 2 }).w === 2);
   ok(load('es/object/create')(Array.prototype) instanceof Array);
   ok(load('es/object/define-property')({}, 'a', { value: 42 }).a === 42);
@@ -824,6 +845,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(load('es/reflect/prevent-extensions')({}));
   ok(load('es/reflect/set')({}, 'a', 42));
   load('es/reflect/set-prototype-of')(O = {}, []);
+  ok(load('es/reflect/to-string-tag') === 'Reflect');
   ok(O instanceof Array);
   ok('has' in load('es/reflect'));
   ok(load('es/string/from-code-point')(97) === 'a');
@@ -851,12 +873,15 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(typeof load('es/string/strike') === 'function');
   ok(typeof load('es/string/sub') === 'function');
   ok(typeof load('es/string/sup') === 'function');
+  ok(typeof load('es/string/replace-all') === 'function');
   ok(load('es/string/pad-start')('a', 3) === '  a');
   ok(load('es/string/pad-end')('a', 3) === 'a  ');
   ok('next' in load('es/string/iterator')('qwe'));
   ok(load('es/string/virtual/code-point-at').call('a', 0) === 97);
   ok(load('es/string/virtual/ends-with').call('qwe', 'we'));
   ok(load('es/string/virtual/includes').call('qwe', 'w'));
+  ok(typeof load('es/string/virtual/match-all') === 'function');
+  ok(typeof load('es/string/virtual/replace-all') === 'function');
   ok(load('es/string/virtual/repeat').call('q', 3) === 'qqq');
   ok(load('es/string/virtual/starts-with').call('qwe', 'qw'));
   ok(load('es/string/virtual/trim').call(' ab ') === 'ab');
@@ -929,6 +954,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   Promise = load('es/promise');
   ok('all' in Promise);
   ok(load('es/promise/all-settled')([1, 2, 3]) instanceof Promise);
+  ok(load('es/promise/any')([1, 2, 3]) instanceof Promise);
   ok('Map' in load('es'));
   ok('setTimeout' in load('web/timers'));
   ok('setImmediate' in load('web/immediate'));
@@ -947,6 +973,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   load('proposals/math-extensions');
   load('proposals/math-signbit');
   load('proposals/number-from-string');
+  load('proposals/number-range');
   load('proposals/object-iteration');
   load('proposals/observable');
   load('proposals/pattern-matching');
@@ -954,6 +981,7 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   load('proposals/promise-any');
   load('proposals/promise-try');
   load('proposals/reflect-metadata');
+  load('proposals/relative-indexing-method');
   load('proposals/keys-composition');
   load('proposals/seeded-random');
   load('proposals/set-methods');
@@ -976,8 +1004,10 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   const instanceAt = load('features/instance/at');
   ok(typeof instanceAt === 'function');
   ok(instanceAt({}) === undefined);
+  ok(typeof instanceAt([]) === 'function');
   ok(typeof instanceAt('') === 'function');
-  ok(instanceAt('').call('abc', 1) === 'b');
+  ok(instanceAt([]).call([1, 2, 3], 2) === 3);
+  ok(instanceAt('').call('123', 2) === '3');
 
   let instanceBind = load('features/instance/bind');
   ok(typeof instanceBind === 'function');
@@ -1128,6 +1158,12 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(instanceFilter({}) === undefined);
   ok(typeof instanceFilter([]) === 'function');
   ok(instanceFilter([]).call([1, 2, 3], it => it % 2).length === 2);
+
+  const instanceFilterOut = load('features/instance/filter-out');
+  ok(typeof instanceFilterOut === 'function');
+  ok(instanceFilterOut({}) === undefined);
+  ok(typeof instanceFilterOut([]) === 'function');
+  ok(instanceFilterOut([]).call([1, 2, 3], it => it % 2).length === 1);
 
   let instanceFindIndex = load('features/instance/find-index');
   ok(typeof instanceFindIndex === 'function');
@@ -1401,7 +1437,17 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(typeof instanceRepeat('') === 'function');
   ok(instanceRepeat('').call('a', 3) === 'aaa');
 
-  const instanceReplaceAll = load('features/instance/replace-all');
+  let instanceReplaceAll = load('features/instance/replace-all');
+  ok(typeof instanceReplaceAll === 'function');
+  ok(instanceReplaceAll({}) === undefined);
+  ok(typeof instanceReplaceAll('') === 'function');
+  ok(instanceReplaceAll('').call('aba', 'a', 'c') === 'cbc');
+  instanceReplaceAll = load('stable/instance/replace-all');
+  ok(typeof instanceReplaceAll === 'function');
+  ok(instanceReplaceAll({}) === undefined);
+  ok(typeof instanceReplaceAll('') === 'function');
+  ok(instanceReplaceAll('').call('aba', 'a', 'c') === 'cbc');
+  instanceReplaceAll = load('es/instance/replace-all');
   ok(typeof instanceReplaceAll === 'function');
   ok(instanceReplaceAll({}) === undefined);
   ok(typeof instanceReplaceAll('') === 'function');
@@ -1571,6 +1617,12 @@ for (const _PATH of ['../packages/core-js-pure', '../packages/core-js']) {
   ok(typeof instanceTrim('') === 'function');
   ok(instanceTrim('').call(' 1 ') === '1');
 
+  const instanceUniqueBy = load('features/instance/unique-by');
+  ok(typeof instanceUniqueBy === 'function');
+  ok(instanceUniqueBy({}) === undefined);
+  ok(typeof instanceUniqueBy([]) === 'function');
+  ok(instanceUniqueBy([]).call([1, 2, 3, 2, 1]).length === 3);
+
   let instanceValues = load('features/instance/values');
   ok(typeof instanceValues === 'function');
   ok(instanceValues({}) === undefined);
@@ -1608,11 +1660,13 @@ ok(typeof load('features/typed-array/int32-array') === 'function');
 ok(typeof load('features/typed-array/uint32-array') === 'function');
 ok(typeof load('features/typed-array/float32-array') === 'function');
 ok(typeof load('features/typed-array/float64-array') === 'function');
+load('features/typed-array/at');
 load('features/typed-array/copy-within');
 load('features/typed-array/entries');
 load('features/typed-array/every');
 load('features/typed-array/fill');
 load('features/typed-array/filter');
+load('features/typed-array/filter-out');
 load('features/typed-array/find');
 load('features/typed-array/find-index');
 load('features/typed-array/for-each');
@@ -1687,4 +1741,4 @@ load('es/typed-array/values');
 ok(typeof load('es/typed-array').Uint32Array === 'function');
 
 // eslint-disable-next-line no-console
-console.log(`Tested ${ tested } CommonJS entry points`);
+console.log(`\u001B[32mtested ${ tested } commonjs entry points\u001B[0m`);

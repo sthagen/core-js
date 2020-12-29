@@ -1,5 +1,5 @@
 'use strict';
-const SUPPORTED_NODE_VERSIONS = require('./package.json').engines.node;
+const SUPPORTED_NODE_VERSIONS = require('./packages/core-js-builder/package.json').engines.node;
 const webpack = require('./.webpack.config.js');
 
 const base = {
@@ -42,6 +42,8 @@ const base = {
   'no-invalid-regexp': 'error',
   // disallow irregular whitespace outside of strings and comments
   'no-irregular-whitespace': 'error',
+  // disallow literal numbers that lose precision
+  // 'no-loss-of-precision': 'error', // TODO
   // disallow characters which are made with multiple code points in character class syntax
   'no-misleading-character-class': 'error',
   // disallow the use of object properties of the global object (Math and JSON) as functions
@@ -60,6 +62,12 @@ const base = {
   'no-unexpected-multiline': 'error',
   // disallow negation of the left operand of an in expression
   'no-unsafe-negation': 'error',
+  // disallow use of optional chaining in contexts where the `undefined` value is not allowed
+  'no-unsafe-optional-chaining': 'error',
+  // disallow loops with a body that allows only one iteration
+  'no-unreachable-loop': 'error',
+  // disallow useless backreferences in regular expressions
+  'no-useless-backreference': 'error',
   // disallow comparisons with the value NaN
   'use-isnan': 'error',
   // disallow unreachable statements after a return, throw, continue, or break statement
@@ -70,6 +78,8 @@ const base = {
   // best practices:
   // enforces return statements in callbacks of array's methods
   'array-callback-return': 'error',
+  // enforce default clauses in switch statements to be last
+  'default-case-last': 'error',
   // encourages use of dot notation whenever possible
   'dot-notation': ['error', { allowKeywords: true }],
   // enforce newline before and after dot
@@ -120,6 +130,8 @@ const base = {
   'no-new-wrappers': 'error',
   // disallow use of (old style) octal literals
   'no-octal': 'error',
+  // disallow `\8` and `\9` escape sequences in string literals
+  'no-nonoctal-decimal-escape': 'error',
   // disallow use of octal escape sequences in string literals, such as var foo = 'Copyright \251';
   'no-octal-escape': 'error',
   // disallow usage of __proto__ property
@@ -214,8 +226,6 @@ const base = {
   'new-cap': ['error', { newIsCap: true, capIsNew: false }],
   // require parentheses when invoking a constructor with no arguments
   'new-parens': 'error',
-  // disallow if as the only statement in an else block
-  'no-lonely-if': 'error',
   // disallow mixed spaces and tabs for indentation
   'no-mixed-spaces-and-tabs': 'error',
   // disallow multiple empty lines and only one newline at the end
@@ -263,16 +273,6 @@ const base = {
   // require or disallow the Unicode Byte Order Mark
   'unicode-bom': ['error', 'never'],
 
-  // commonjs:
-  // require require() calls to be placed at top-level module scope
-  'global-require': 'error',
-  // disallow require calls to be mixed with regular variable declarations
-  'no-mixed-requires': ['error', { grouping: true, allowCall: false }],
-  // disallow new operators with calls to require
-  'no-new-require': 'error',
-  // disallow string concatenation with `__dirname` and `__filename`
-  'no-path-concat': 'error',
-
   // import:
   // ensure all imports appear before other statements
   'import/first': 'error',
@@ -296,8 +296,16 @@ const base = {
   // node:
   // enforce the style of file extensions in `import` declarations
   'node/file-extension-in-import': ['error', 'never'],
+  // require require() calls to be placed at top-level module scope
+  'node/global-require': 'error',
   // disallow the assignment to `exports`
   'node/no-exports-assign': 'error',
+  // disallow require calls to be mixed with regular variable declarations
+  'node/no-mixed-requires': ['error', { grouping: true, allowCall: false }],
+  // disallow new operators with calls to require
+  'node/no-new-require': 'error',
+  // disallow string concatenation with `__dirname` and `__filename`
+  'node/no-path-concat': 'error',
 
   // es6+:
   // require parentheses around arrow function arguments
@@ -335,8 +343,10 @@ const base = {
   strict: ['error', 'global'],
 
   // unicorn
+  // enforce the use of regex shorthands to improve readability
+  'unicorn/better-regex': 'error',
   // enforce a specific parameter name in catch clauses
-  'unicorn/catch-error-name': ['error', { name: 'error', caughtErrorsIgnorePattern: '^err' }],
+  'unicorn/catch-error-name': ['error', { name: 'error', ignore: [/^err/] }],
   // enforce passing a message value when throwing a built-in error
   'unicorn/error-message': 'error',
   // require escape sequences to use uppercase values
@@ -351,6 +361,8 @@ const base = {
   'unicorn/no-console-spaces': 'error',
   // enforce the use of unicode escapes instead of hexadecimal escapes
   'unicorn/no-hex-escape': 'error',
+  // disallow if as the only statement in an else block
+  'unicorn/no-lonely-if': 'error',
   // disallow unreadable array destructuring
   'unicorn/no-unreadable-array-destructuring': 'error',
   // disallow unsafe regular expressions
@@ -361,8 +373,6 @@ const base = {
   'unicorn/number-literal-case': 'error',
   // prefer `String#slice` over `String#{ substr, substring }`
   'unicorn/prefer-string-slice': 'error',
-  // enforce the use of regex shorthands to improve readability
-  'unicorn/regex-shorthand': 'error',
 
   // optimize regex literals
   'optimize-regex/optimize-regex': 'error',
@@ -476,6 +486,8 @@ const qunit = {
   'qunit/assert-args': 'error',
   // forbid the use of assert.equal
   'qunit/no-assert-equal': 'error',
+  // require use of boolean assertions
+  'qunit/no-assert-equal-boolean': 'error',
   // forbid binary logical expressions in assert arguments
   'qunit/no-assert-logical-expression': 'error',
   // forbid async calls in loops
@@ -502,6 +514,8 @@ const qunit = {
   'qunit/no-init': 'error',
   // forbid use of QUnit.jsDump
   'qunit/no-jsdump': 'error',
+  // forbid QUnit.test() calls inside callback of another QUnit.test
+  'qunit/no-nested-tests': 'error',
   // forbid equality comparisons in assert.{ok, notOk}
   'qunit/no-ok-equality': 'error',
   // forbid the use of QUnit.push
@@ -527,7 +541,7 @@ const qunit = {
 module.exports = {
   root: true,
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 2021,
   },
   env: {
     browser: true,
