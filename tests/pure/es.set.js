@@ -1,4 +1,4 @@
-/* eslint-disable sonarjs/no-element-overwrite */
+/* eslint-disable radar/no-element-overwrite -- required for testing */
 
 import { createIterable, is, nativeSubclass } from '../helpers/helpers';
 import { DESCRIPTORS } from '../helpers/constants';
@@ -280,8 +280,7 @@ QUnit.test('Set Iterator', assert => {
   assert.ok(set.delete('b'));
   assert.ok(set.delete('c'));
   set.add('e');
-  results.push(iterator.next().value);
-  results.push(iterator.next().value);
+  results.push(iterator.next().value, iterator.next().value);
   assert.ok(iterator.next().done);
   set.add('f');
   assert.ok(iterator.next().done);

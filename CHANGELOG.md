@@ -1,4 +1,15 @@
 ## Changelog
+##### Unreleased
+- Nothing
+
+##### 3.8.3 - 2021.01.19
+- Fixed some more issues related to FF44- legacy `Iterator`, [#906](https://github.com/zloirock/core-js/issues/906)
+
+##### 3.8.2 - 2021.01.03
+- Fixed handling of special replacements patterns in `String#replaceAll`, [#900](https://github.com/zloirock/core-js/issues/900)
+- Fixed iterators dependencies of `Promise.any` and `Promise.allSettled` entries
+- Fixed microtask implementation on WebOS, [#898](https://github.com/zloirock/core-js/issues/898), [#901](https://github.com/zloirock/core-js/issues/901)
+
 ##### 3.8.1 - 2020.12.06
 - Fixed work of new `%TypedArray%` methods on `BigInt` arrays
 - Added ESNext methods to ES3 workaround for `Number` constructor wrapper
@@ -307,7 +318,7 @@
 - Features
   - Add new features:
     - `Object.fromEntries` ([ECMAScript 2019](https://github.com/tc39/proposal-object-from-entries))
-    - `Symbol#description` ([ECMAScript 2019](https://tc39.github.io/ecma262/#sec-symbol.prototype.description))
+    - `Symbol#description` ([ECMAScript 2019](https://tc39.es/ecma262/#sec-symbol.prototype.description))
     - New `Set` methods ([stage 2 proposal](https://github.com/tc39/proposal-set-methods))
       - `Set#difference`
       - `Set#intersection`
@@ -569,7 +580,7 @@
   - `Math.scale`
 - Added `Math.signbit` [stage 1 proposal](http://jfbastien.github.io/papers/Math.signbit.html)
 - Updated `global` [stage 3 proposal](https://github.com/tc39/proposal-global) - added `global` global object, `System.global` deprecated
-- Updated `Object.getOwnPropertyDescriptors` to the [final version](https://tc39.github.io/ecma262/2017/#sec-object.getownpropertydescriptors) - it should not create properties if descriptors are `undefined`
+- Updated `Object.getOwnPropertyDescriptors` to the [final version](https://tc39.es/ecma262/2017/#sec-object.getownpropertydescriptors) - it should not create properties if descriptors are `undefined`
 - Updated the list of iterable DOM collections, [#249](https://github.com/zloirock/core-js/issues/249), added:
   - `CSSStyleDeclaration#@@iterator`
   - `CSSValueList#@@iterator`
@@ -598,8 +609,8 @@
   - `TextTrackList#@@iterator`
   - `TouchList#@@iterator`
 - Updated stages of proposals:
-  - [`Object.getOwnPropertyDescriptors`](https://github.com/tc39/proposal-object-getownpropertydescriptors) to [stage 4 (ES2017)](https://tc39.github.io/ecma262/2017/#sec-object.getownpropertydescriptors)
-  - [String padding](https://github.com/tc39/proposal-string-pad-start-end) to [stage 4 (ES2017)](https://tc39.github.io/ecma262/2017/#sec-string.prototype.padend)
+  - [`Object.getOwnPropertyDescriptors`](https://github.com/tc39/proposal-object-getownpropertydescriptors) to [stage 4 (ES2017)](https://tc39.es/ecma262/2017/#sec-object.getownpropertydescriptors)
+  - [String padding](https://github.com/tc39/proposal-string-pad-start-end) to [stage 4 (ES2017)](https://tc39.es/ecma262/2017/#sec-string.prototype.padend)
   - [`global`](https://github.com/tc39/proposal-global) to [stage 3](https://github.com/rwaldron/tc39-notes/blob/master/es7/2016-09/sept-28.md#revisit-systemglobal--global)
   - [String trimming](https://github.com/tc39/proposal-string-left-right-trim) to [stage 2](https://github.com/rwaldron/tc39-notes/blob/master/es7/2016-07/jul-27.md#10iic-trimstarttrimend)
 - Updated typed arrays to the modern (ES2016+) arguments validation, 

@@ -1,15 +1,18 @@
 'use strict';
-/* eslint-disable no-console */
+/* eslint-disable no-console -- output */
 const { readdir, readFile, writeFile } = require('fs').promises;
 const NEW_VERSION = require('../package').version;
 const PREV_VERSION = require('../packages/core-js/package').version;
 
+const now = new Date();
 const NEW_VERSION_MINOR = NEW_VERSION.replace(/^(\d+\.\d+)\..*/, '$1');
 const PREV_VERSION_MINOR = PREV_VERSION.replace(/^(\d+\.\d+)\..*/, '$1');
+const CHANGELOG = './CHANGELOG.md';
 const LICENSE = './LICENSE';
 const README = './README.md';
+const LERNA = './lerna.json';
 const SHARED = './packages/core-js/internals/shared.js';
-const CURRENT_YEAR = `${ new Date().getFullYear() }`;
+const CURRENT_YEAR = now.getFullYear();
 
 (async function () {
   const license = await readFile(LICENSE, 'utf8');
@@ -18,6 +21,8 @@ const CURRENT_YEAR = `${ new Date().getFullYear() }`;
     return console.log('\u001B[31mupdate is not required\u001B[0m');
   }
   await writeFile(LICENSE, license.split(OLD_YEAR).join(CURRENT_YEAR));
+  const lerna = await readFile(LERNA, 'utf8');
+  await writeFile(LERNA, lerna.split(PREV_VERSION).join(NEW_VERSION));
   const readme = await readFile(README, 'utf8');
   await writeFile(README, readme
     .split(PREV_VERSION).join(NEW_VERSION)
@@ -37,6 +42,14 @@ const CURRENT_YEAR = `${ new Date().getFullYear() }`;
       }
     }
     await writeFile(PATH, `${ JSON.stringify(pkg, null, '  ') }\n`);
+  }
+  if (NEW_VERSION !== PREV_VERSION) {
+    const changelog = await readFile(CHANGELOG, 'utf8');
+    await writeFile(CHANGELOG, changelog.split('##### Unreleased').join(`##### Unreleased\n- Nothing\n\n##### ${
+      NEW_VERSION
+    } - ${
+      CURRENT_YEAR }.${ String(now.getMonth() + 1).padStart(2, '0') }.${ String(now.getDate()).padStart(2, '0')
+    }`));
   }
   if (CURRENT_YEAR !== OLD_YEAR) console.log('\u001B[32mthe year updated\u001B[0m');
   if (NEW_VERSION !== PREV_VERSION) console.log('\u001B[32mthe version updated\u001B[0m');

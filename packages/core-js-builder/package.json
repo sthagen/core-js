@@ -1,17 +1,17 @@
 {
   "name": "core-js-builder",
   "description": "core-js builder",
-  "version": "3.8.1",
+  "version": "3.8.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/zloirock/core-js.git"
   },
   "main": "index.js",
   "dependencies": {
-    "core-js": "3.8.1",
-    "core-js-compat": "3.8.1",
+    "core-js": "3.8.3",
+    "core-js-compat": "3.8.3",
     "mkdirp": ">=0.5.5 <1",
-    "webpack": ">=4.44.2 <5"
+    "webpack": ">=4.46.0 <5"
   },
   "engines": {
     "node": ">=8.9.0"
