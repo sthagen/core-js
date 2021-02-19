@@ -1,8 +1,8 @@
 'use strict';
 /* eslint-disable no-console -- output */
 const { readdir, readFile, writeFile } = require('fs').promises;
+const PREV_VERSION = require('core-js/package').version;
 const NEW_VERSION = require('../package').version;
-const PREV_VERSION = require('../packages/core-js/package').version;
 
 const now = new Date();
 const NEW_VERSION_MINOR = NEW_VERSION.replace(/^(\d+\.\d+)\..*/, '$1');
@@ -14,7 +14,7 @@ const LERNA = './lerna.json';
 const SHARED = './packages/core-js/internals/shared.js';
 const CURRENT_YEAR = now.getFullYear();
 
-(async function () {
+(async () => {
   const license = await readFile(LICENSE, 'utf8');
   const OLD_YEAR = +license.match(/2014-(\d{4}) D/m)[1];
   if (NEW_VERSION === PREV_VERSION && CURRENT_YEAR === OLD_YEAR) {
